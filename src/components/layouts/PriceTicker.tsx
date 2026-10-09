@@ -63,7 +63,7 @@ export default function PriceTicker() {
 
   return (
     <div className="w-full bg-slate-50 border-b border-slate-200 py-2.5">
-      <Marquee speed={65} gradient={false} pauseOnHover={true}>
+      <Marquee speed={90} gradient={false} pauseOnHover={true}>
         <div className="flex items-center gap-8 px-4">
           {products.map((item) => {
             const isUp = item.change?.dir === "up";
