@@ -4,8 +4,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// TODO: Replace with your actual BetterAuth client import path
-// import { authClient } from "@/lib/auth-client"; 
+import { authClient } from "@/lib/auth-client"; 
 
 export default function SignInPage() {
   const router = useRouter();
@@ -20,8 +19,7 @@ export default function SignInPage() {
     setError("");
 
     try {
-      // Uncomment when BetterAuth is fully wired up tomorrow
-      const { data, error: authError } = await authClient.signIn.email({
+      const { error: authError } = await authClient.signIn.email({
         email,
         password,
       });
@@ -31,16 +29,21 @@ export default function SignInPage() {
       }
       
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "সাইন ইন করতে সমস্যা হয়েছে।");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "সাইন ইন করতে সমস্যা হয়েছে।";
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
 
+  // UPDATED FUNCTION: Added callbackURL for guaranteed redirect
   const handleSocialSignIn = async (provider: "google" | "github") => {
     try {
-      await authClient.signIn.social({ provider });
+      await authClient.signIn.social({ 
+        provider,
+        callbackURL: "/"
+      });
     } catch (err) {
       console.error(`${provider} sign in failed`, err);
     }
@@ -48,13 +51,13 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen bg-[#F4F6F4] flex flex-col items-center justify-center p-4">
-      {/* Header section[cite: 17] */}
+      {/* Header section */}
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800 mb-2">সাইন ইন</h1>
         <p className="text-slate-500 text-sm">বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।</p>
       </div>
 
-      {/* Main Form Card[cite: 17] */}
+      {/* Main Form Card */}
       <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-100 max-w-md w-full">
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-md border border-red-100">
@@ -97,14 +100,14 @@ export default function SignInPage() {
           </button>
         </form>
 
-        {/* Divider[cite: 17] */}
+        {/* Divider */}
         <div className="relative flex py-6 items-center">
-          <div className="flex-grow border-t border-slate-200"></div>
-          <span className="flex-shrink-0 mx-4 text-slate-400 text-xs">অথবা</span>
-          <div className="flex-grow border-t border-slate-200"></div>
+          <div className="grow border-t border-slate-200"></div>
+          <span className="shrink-0 mx-4 text-slate-400 text-xs">অথবা</span>
+          <div className="grow border-t border-slate-200"></div>
         </div>
 
-        {/* Social Buttons[cite: 17] */}
+        {/* Social Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
           <button 
             onClick={() => handleSocialSignIn("google")}
@@ -130,7 +133,7 @@ export default function SignInPage() {
           </button>
         </div>
 
-        {/* Footer Link[cite: 17] */}
+        {/* Footer Link */}
         <div className="mt-8 text-center">
           <p className="text-sm text-slate-600">
             অ্যাকাউন্ট নেই? <Link href="/signup" className="text-green-600 font-semibold hover:underline">সাইন আপ করুন</Link>

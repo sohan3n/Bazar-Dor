@@ -16,39 +16,45 @@ export default function SignUpPage() {
   const [error, setError] = useState("");
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (password !== confirmPassword) {
-    setError("পাসওয়ার্ড মিলছে না!");
-    return;
-  }
-  
-  setLoading(true);
-  setError("");
-
-  try {
-    const { data, error: authError } = await authClient.signUp.email({
-      email,
-      password,
-      name,
-    });
-
-    if (authError) {
-      console.log("BetterAuth Error:", authError);
-      throw new Error(authError.message || "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।");
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("পাসওয়ার্ড মিলছে না!");
+      return;
     }
+    
+    setLoading(true);
+    setError("");
 
-    router.push("/");
-  } catch (err: any) {
-    console.log("Catch Error:", err);
-    setError(err.message || "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const { error: authError } = await authClient.signUp.email({
+        email,
+        password,
+        name,
+      });
 
+      if (authError) {
+        console.log("BetterAuth Error:", authError);
+        throw new Error(authError.message || "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।");
+      }
+
+      router.push("/");
+    } catch (err: unknown) {
+      console.log("Catch Error:", err);
+      const message =
+        err instanceof Error ? err.message : "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // UPDATED FUNCTION: Added callbackURL so it knows where to redirect
   const handleSocialSignUp = async (provider: "google" | "github") => {
     try {
-      await authClient.signIn.social({ provider });
+      await authClient.signIn.social({ 
+        provider,
+        callbackURL: "/" 
+      });
     } catch (err) {
       console.error(`${provider} sign in failed`, err);
     }
@@ -56,7 +62,7 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-[#F4F6F4] flex flex-col items-center justify-center p-4">
-      {/* Header section[cite: 13] */}
+      {/* Header section */}
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold text-slate-800 mb-2">
           অ্যাকাউন্ট তৈরি করুন
@@ -66,7 +72,7 @@ export default function SignUpPage() {
         </p>
       </div>
 
-      {/* Main Form Card[cite: 13] */}
+      {/* Main Form Card */}
       <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-100 max-w-md w-full">
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-md border border-red-100">
@@ -141,14 +147,14 @@ export default function SignUpPage() {
           </button>
         </form>
 
-        {/* Divider[cite: 13] */}
+        {/* Divider */}
         <div className="relative flex py-6 items-center">
           <div className="grow border-t border-slate-200"></div>
           <span className="shrink-0 mx-4 text-slate-400 text-xs">অথবা</span>
           <div className="grow border-t border-slate-200"></div>
         </div>
 
-        {/* Social Buttons[cite: 13] */}
+        {/* Social Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             onClick={() => handleSocialSignUp("google")}
@@ -199,7 +205,7 @@ export default function SignUpPage() {
           </button>
         </div>
 
-        {/* Footer Link[cite: 13] */}
+        {/* Footer Link */}
         <div className="mt-8 text-center">
           <p className="text-sm text-slate-600">
             অ্যাকাউন্ট আছে?{" "}
