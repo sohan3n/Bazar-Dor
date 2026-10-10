@@ -21,7 +21,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="bg-[#F5FAF6] rounded-2xl p-6 sm:p-10 mb-10 flex flex-col md:flex-row items-center justify-between border border-green-50 shadow-sm relative overflow-hidden">
+    <div className="bg-[#FFFFFF] rounded-2xl p-6 sm:p-10 mb-10 flex flex-col md:flex-row items-center justify-between border border-green-50 shadow-sm relative overflow-hidden">
       
       {/* Content Side */}
       <div className="flex-1 z-10">
