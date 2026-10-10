@@ -1,7 +1,8 @@
+import Hero from "@/components/ui/Hero";
 
 
 export default function Home() {
   return (
-    <h1>BazarDor</h1>
+    <Hero />
   );
 }
