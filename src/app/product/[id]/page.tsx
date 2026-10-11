@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-// Utility functions
 const toBnNum = (num: number | string): string => {
   if (num === undefined || num === null) return "০";
   const bnDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
@@ -33,7 +32,7 @@ export default function ProductDetailPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${params.id}`);
+        const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${params.id}`, { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setProduct(data);
@@ -62,7 +61,6 @@ export default function ProductDetailPage() {
 
   if (!product) return <div className="text-center py-20 text-slate-500">পণ্য পাওয়া যায়নি।</div>;
 
-  // Calculations
   const isUp = product.change?.dir === "up";
   const isDown = product.change?.dir === "down";
   const priceDiff = Math.abs((product.today || 0) - (product.yesterday || 0));

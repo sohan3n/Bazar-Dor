@@ -14,13 +14,11 @@ export interface Product {
   };
 }
 
-// Utility to convert English numbers to Bengali numerals
 const toBnNum = (num: number | string): string => {
   const bnDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
   return num.toString().replace(/\d/g, (d) => bnDigits[parseInt(d)]);
 };
 
-// Utility to map standard units to Bengali
 const translateUnit = (unit: string): string => {
   const unitMap: Record<string, string> = {
     kg: "প্রতি কেজি",

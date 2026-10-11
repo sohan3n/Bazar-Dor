@@ -1,10 +1,10 @@
-// src/app/(auth)/signup/page.tsx
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -19,9 +19,10 @@ export default function SignUpPage() {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError("পাসওয়ার্ড মিলছে না!");
+      toast.error("পাসওয়ার্ড মিলছে না!");
       return;
     }
-    
+
     setLoading(true);
     setError("");
 
@@ -34,29 +35,35 @@ export default function SignUpPage() {
 
       if (authError) {
         console.log("BetterAuth Error:", authError);
-        throw new Error(authError.message || "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।");
+        throw new Error(
+          authError.message || "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।",
+        );
       }
 
-      router.push("/");
+      toast.success("সফলভাবে অ্যাকাউন্ট তৈরি হয়েছে!");
+      router.push("/signin");
     } catch (err: unknown) {
       console.log("Catch Error:", err);
       const message =
-        err instanceof Error ? err.message : "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।";
+        err instanceof Error
+          ? err.message
+          : "অ্যাকাউন্ট তৈরি করতে সমস্যা হয়েছে।";
       setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
   };
 
-  // UPDATED FUNCTION: Added callbackURL so it knows where to redirect
   const handleSocialSignUp = async (provider: "google" | "github") => {
     try {
-      await authClient.signIn.social({ 
+      await authClient.signIn.social({
         provider,
-        callbackURL: "/" 
+        callbackURL: "/",
       });
     } catch (err) {
       console.error(`${provider} sign in failed`, err);
+      toast.error("সাইন আপ করতে সমস্যা হয়েছে।");
     }
   };
 

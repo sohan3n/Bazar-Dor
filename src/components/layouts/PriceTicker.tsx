@@ -1,11 +1,9 @@
-// src/components/layout/PriceTicker.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Marquee from "react-fast-marquee";
 
-// Helper functions for Bengali formatting
 const engToBng = (num: number | string) => {
   const bngDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
   return num?.toString().replace(/\d/g, (d) => bngDigits[parseInt(d)]) || "০";
@@ -21,7 +19,6 @@ const translateUnit = (unit: string) => {
   return units[unit?.toLowerCase()] || unit;
 };
 
-// Types based on the actual API response
 type Product = {
   id: number;
   slug: string;
@@ -41,7 +38,7 @@ export default function PriceTicker() {
   useEffect(() => {
     const fetchTickerProducts = async () => {
       try {
-        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
+        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/categories", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setProducts(data);

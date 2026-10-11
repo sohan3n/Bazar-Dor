@@ -5,6 +5,7 @@ import Navbar from "@/components/layouts/Navbar";
 import PriceTicker from "@/components/layouts/PriceTicker";
 import Footer from "@/components/layouts/Footer";
 import { Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
@@ -30,7 +31,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar />
         </Suspense>
         <PriceTicker />
-        <main>{children}</main>
+        <main>
+          {children}
+          <Toaster position="top-center" />
+        </main>
         <Footer />
       </body>
     </html>

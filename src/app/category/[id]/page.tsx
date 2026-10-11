@@ -24,13 +24,11 @@ interface Product {
   };
 }
 
-// Utility to convert English numbers to Bengali numerals
 const toBnNum = (num: number | string): string => {
   const bnDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
   return num.toString().replace(/\d/g, (d) => bnDigits[parseInt(d)]);
 };
 
-// Utility to map standard units to Bengali
 const translateUnit = (unit: string): string => {
   const unitMap: Record<string, string> = {
     kg: "প্রতি কেজি",
@@ -51,12 +49,10 @@ export default function CategoryPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Sorting State
   const [sortBy, setSortBy] = useState<"default" | "asc" | "desc">("default");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -76,10 +72,10 @@ export default function CategoryPage() {
       try {
         const [categoryRes, productsRes] = await Promise.all([
           fetch(
-            `https://openapi.programming-hero.com/api/bazardor/categories/${categoryId}`,
+            `https://openapi.programming-hero.com/api/bazardor/categories/${categoryId}`, { cache: "no-store" }
           ),
           fetch(
-            `https://openapi.programming-hero.com/api/bazardor/products?category=${categoryId}`,
+            `https://openapi.programming-hero.com/api/bazardor/products?category=${categoryId}`, { cache: "no-store" }
           ),
         ]);
 
@@ -99,7 +95,6 @@ export default function CategoryPage() {
     if (categoryId) fetchCategoryData();
   }, [categoryId]);
 
-  // Derived state: Sorted products
   const sortedProducts = [...products].sort((a, b) => {
     if (sortBy === "asc") return a.today - b.today;
     if (sortBy === "desc") return b.today - a.today;
@@ -146,7 +141,6 @@ export default function CategoryPage() {
   return (
     <div className="min-h-[calc(100vh-140px)] bg-[#F4F6F4] py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Category Header Banner */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-6 flex items-center gap-4">
           <div className="w-14 h-14 bg-rose-50 flex items-center justify-center rounded-full text-3xl">
             {category.icon}
@@ -161,7 +155,6 @@ export default function CategoryPage() {
           </div>
         </div>
 
-        {/* Sub-header & Filters */}
         <div className="flex justify-between items-center mb-4">
           <div className="text-sm text-slate-500">
             মোট {toBnNum(products.length)}টি পণ্য দেখানো হচ্ছে
@@ -258,8 +251,6 @@ export default function CategoryPage() {
                           </span>
                         </div>
                       </div>
-
-                      {/* Styled Percentage Badge */}
                       <div
                         className={`px-2 py-1 rounded-md flex items-center gap-1 text-[13px] font-semibold
                         ${isUp ? "bg-red-50 text-red-600" : ""}

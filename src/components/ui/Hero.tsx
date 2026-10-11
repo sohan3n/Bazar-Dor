@@ -8,7 +8,6 @@ export default function Hero() {
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    // Dynamically generate today's date in Bengali format
     const date = new Date();
     const options: Intl.DateTimeFormatOptions = { 
       weekday: 'long', 
@@ -50,7 +49,7 @@ export default function Hero() {
         </Link>
       </div>
 
-      <div className="mt-8 md:mt-0 flex-shrink-0 z-10 pl-0 md:pl-10 flex justify-center">
+      <div className="mt-8 md:mt-0 shrink-0 z-10 pl-0 md:pl-10 flex justify-center">
         <Image 
           src="/bazar-hero.png" 
           alt="BazarDor Hero Basket" 

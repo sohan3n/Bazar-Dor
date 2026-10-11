@@ -15,7 +15,7 @@ export default function ProductSection() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://openapi.programming-hero.com/api/bazardor/products");
+        const response = await fetch("https://openapi.programming-hero.com/api/bazardor/products", { cache: "no-store" });
         if (response.ok) {
           const data = await response.json();
           setProducts(data);

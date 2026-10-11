@@ -14,7 +14,6 @@ export default function ProfilePage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
-  // Sync the input field with the user's actual name once loaded
   useEffect(() => {
     if (user?.name) {
       setName(user.name);
@@ -60,7 +59,6 @@ export default function ProfilePage() {
     );
   }
 
-  // Fallback avatar if no image exists
   const avatarUrl =
     user?.image ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=0F8A43&color=fff`;
@@ -77,8 +75,6 @@ export default function ProfilePage() {
             আপনার অ্যাকাউন্টের তথ্য এখানে দেখুন।
           </p>
         </div>
-
-        {/* Card 1: User Overview[cite: 27] */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <div className="flex items-center gap-4">
             <Image
@@ -118,7 +114,6 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* Card 2: Edit Information[cite: 27] */}
         <div className="bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-slate-100">
           <h3 className="text-lg font-bold text-slate-800 mb-6">তথ্য</h3>
 

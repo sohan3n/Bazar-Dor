@@ -21,7 +21,6 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   
-  // Fetch real authentication state
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
@@ -29,7 +28,7 @@ export default function Navbar() {
     setMounted(true);
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://api.api-store.workers.dev/api/bazardor/categories");
+        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/categories", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setCategories(data);
@@ -41,19 +40,17 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
-  // Handle Sign Out
   const handleSignOut = async () => {
     try {
       await authClient.signOut();
       setIsDropdownOpen(false);
       router.push("/");
-      router.refresh(); // Forces Next.js to clear client cache and reflect logged-out state
+      router.refresh();
     } catch (error) {
       console.error("Failed to sign out", error);
     }
   };
 
-  // Hydration-safe date rendering
   const banglaDate = mounted 
     ? new Intl.DateTimeFormat("bn-BD", {
         weekday: "long",
@@ -63,7 +60,6 @@ export default function Navbar() {
       }).format(new Date())
     : "";
 
-  // Dynamic Avatar fallback based on user's name
   const avatarUrl = user?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=0F8A43&color=fff`;
 
   return (
@@ -88,10 +84,8 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Right: Auth Buttons / Profile Dropdown */}
           <div className="relative">
             {isPending ? (
-              // Loading Skeleton to prevent UI flickering
               <div className="h-10 w-24 bg-slate-100 animate-pulse rounded-md"></div>
             ) : !user ? (
               // Logged Out State
@@ -104,7 +98,6 @@ export default function Navbar() {
                 </Link>
               </div>
             ) : (
-              // Logged In State
               <div>
                 <button 
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -150,7 +143,7 @@ export default function Navbar() {
         </div>
 
         {/* Second Row: Category Links */}
-        <nav className="flex items-center gap-8 overflow-x-auto py-3 no-scrollbar">
+        <nav className="flex items-center gap-2 overflow-x-auto py-3 no-scrollbar">
           {categories.length === 0 ? (
             [...Array(8)].map((_, i) => (
               <div key={i} className="h-5 w-20 bg-slate-200 animate-pulse rounded"></div>
@@ -166,8 +159,8 @@ export default function Navbar() {
                   href={href}
                   className={`flex items-center gap-2 text-sm whitespace-nowrap cursor-pointer transition-colors ${
                     isActive 
-                      ? "text-green-600 font-bold border-b-2 border-green-600 pb-1" 
-                      : "text-slate-600 hover:text-green-600"
+                      ? "bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg" 
+                      : "text-slate-600 hover:text-green-600 px-3 py-1.5"
                   }`}
                 >
                   <span className="text-lg">{category.icon}</span>
