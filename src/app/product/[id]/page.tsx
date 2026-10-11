@@ -32,10 +32,11 @@ export default function ProductDetailPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products/${params.id}`, { cache: "no-store" });
+        const res = await fetch(`https://openapi.programming-hero.com/api/bazardor/products`, { cache: "no-store" });
         if (res.ok) {
-          const data = await res.json();
-          setProduct(data);
+          const allProducts = await res.json();
+          const foundProduct = allProducts.find((p: any) => String(p.id) === String(params.id));
+          setProduct(foundProduct || null);
         }
       } catch (error) {
         console.error("Failed to fetch product details:", error);
@@ -59,7 +60,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  if (!product) return <div className="text-center py-20 text-slate-500">পণ্য পাওয়া যায়নি।</div>;
+  if (!product) return <div className="text-center py-20 text-slate-500">পণ্য পাওয়া যায়নি।</div>;
 
   const isUp = product.change?.dir === "up";
   const isDown = product.change?.dir === "down";
@@ -94,9 +95,10 @@ export default function ProductDetailPage() {
             </div>
             <div>
               <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 mb-1">{product.nameBn}</h1>
-              <p className="text-sm text-slate-500 mb-2">প্রতি {translateUnit(product.unit)} - {product.categoryNameBn}</p>
+              {/* FIXED SYNTAX ERROR HERE */}
+              <p className="text-sm text-slate-500 mb-2">প্রতি {translateUnit(product.unit)}</p>
               <p className="text-[13px] text-slate-600">
-                গতকালকের তুলনায় আজকের দাম <span className="font-semibold">{isUp ? "বেড়েছে" : isDown ? "কমেছে" : "অপরিবর্তিত"} {toBnNum(priceDiff)} টাকা</span>
+                গতকালকের তুলনায় আজকের দাম <span className="font-semibold">{isUp ? "বেড়েছে" : isDown ? "কমেছে" : "অপরিবর্তিত"} {toBnNum(priceDiff)} টাকা</span>
               </p>
             </div>
           </div>
@@ -132,15 +134,15 @@ export default function ProductDetailPage() {
             <div className="bg-white p-5 rounded-xl border border-slate-100 flex flex-col justify-center">
               <p className="text-sm text-slate-500 mb-2">সর্বনিম্ন দাম</p>
               <p className="text-2xl font-bold text-[#0F8A43] mb-1">{toBnNum(globalMin)} <span className="text-sm font-normal text-slate-500">টাকা</span></p>
-              <p className="text-xs text-slate-400">সবচেয়ে কম পাওয়া যাচ্ছে</p>
+              <p className="text-xs text-slate-400">সবচেয়ে কম পাওয়া যাচ্ছে</p>
             </div>
             <div className="bg-white p-5 rounded-xl border border-slate-100 flex flex-col justify-center">
               <p className="text-sm text-slate-500 mb-2">সর্বোচ্চ দাম</p>
               <p className="text-2xl font-bold text-red-500 mb-1">{toBnNum(globalMax)} <span className="text-sm font-normal text-slate-500">টাকা</span></p>
-              <p className="text-xs text-slate-400">সবচেয়ে বেশি পাওয়া যাচ্ছে</p>
+              <p className="text-xs text-slate-400">সবচেয়ে বেশি পাওয়া যাচ্ছে</p>
             </div>
             <div className="bg-white p-5 rounded-xl border border-slate-100 flex flex-col justify-center">
-              <p className="text-sm text-slate-500 mb-2">গড় দাম</p>
+              <p className="text-sm text-slate-500 mb-2">গড় দাম</p>
               <p className="text-2xl font-bold text-slate-800 mb-1">{toBnNum(product.today)} <span className="text-sm font-normal text-slate-500">টাকা</span></p>
               <p className="text-xs text-slate-400">প্রতি {translateUnit(product.unit)}-এর হিসাব</p>
             </div>
@@ -161,7 +163,7 @@ export default function ProductDetailPage() {
                     <th className="py-4 px-6 font-medium">বিভাগ</th>
                     <th className="py-4 px-6 font-medium">সর্বনিম্ন</th>
                     <th className="py-4 px-6 font-medium">সর্বোচ্চ</th>
-                    <th className="py-4 px-6 font-medium text-right">গড়</th>
+                    <th className="py-4 px-6 font-medium text-right">গড়</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm text-slate-700 divide-y divide-slate-100">

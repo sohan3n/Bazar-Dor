@@ -69,7 +69,7 @@ export default function PriceTicker() {
             return (
               <Link
                 key={item.id}
-                href={`/product/${item.slug}`}
+                href={`/product/${item.id}`}
                 className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-green-600 transition-colors cursor-pointer whitespace-nowrap"
               >
                 <span className="text-lg">{item.image}</span>
