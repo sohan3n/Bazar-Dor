@@ -38,7 +38,7 @@ export default function PriceTicker() {
   useEffect(() => {
     const fetchTickerProducts = async () => {
       try {
-        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/categories", { cache: "no-store" });
+        const res = await fetch("https://openapi.programming-hero.com/api/bazardor/products", { cache: "no-store" });
         if (res.ok) {
           const data = await res.json();
           setProducts(data);
